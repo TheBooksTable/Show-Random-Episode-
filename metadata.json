@@ -1,0 +1,5 @@
+{
+  "name": "Random Episode Recommender",
+  "description": "An application that randomly recommends a TV series episode based on user-selected shows and season ranges, featuring a stylish, animated glassmorphism interface.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,21 @@
+{
+  "short_name": "Episode Finder",
+  "name": "Random Episode Recommender",
+  "description": "An application that randomly recommends a TV series episode based on user-selected shows and season ranges, featuring a stylish, animated glassmorphism interface.",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000010",
+  "background_color": "#000010"
+}
