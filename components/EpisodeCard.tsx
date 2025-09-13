@@ -1,12 +1,7 @@
 import React from 'react';
-import { Episode } from '../types';
-import { StarIcon } from './icons/StarIcon';
+import { StarIcon } from './icons/StarIcon.tsx';
 
-interface EpisodeCardProps {
-    episode: Episode;
-}
-
-const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
+const EpisodeCard = ({ episode }) => {
     return (
         <div className="bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 shadow-lg text-white overflow-hidden">
             <div className="p-6">

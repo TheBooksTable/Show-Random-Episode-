@@ -1,6 +1,4 @@
-import { Series } from './types';
-
-export const seriesList: Series[] = [
+export const seriesList = [
   { name: '13 Reasons Why', seasons: 4 },
   { name: '24', seasons: 9 },
   { name: '3%', seasons: 4 },

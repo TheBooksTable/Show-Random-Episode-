@@ -1,11 +1,6 @@
 import React from 'react';
 
-interface ToastProps {
-  message: string;
-  show: boolean;
-}
-
-const Toast: React.FC<ToastProps> = ({ message, show }) => {
+const Toast = ({ message, show }) => {
   if (!message) return null;
 
   return (

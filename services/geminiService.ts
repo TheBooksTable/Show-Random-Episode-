@@ -1,12 +1,10 @@
-import { Episode } from '../types';
-
 const API_BASE_URL = 'https://api.tvmaze.com';
 
 // A simple in-memory cache to avoid re-fetching the same episode list.
-const episodeCache = new Map<string, any[]>();
+const episodeCache = new Map();
 
 // Helper function to strip HTML tags from summaries
-const stripHtml = (html: string | null | undefined): string => {
+const stripHtml = (html) => {
     if (!html) return "No summary available.";
     return html.replace(/<[^>]*>?/gm, '');
 };
@@ -17,9 +15,9 @@ const stripHtml = (html: string | null | undefined): string => {
  * @param seriesName The name of the TV series.
  * @returns A promise that resolves to an array of episode objects.
  */
-export async function fetchEpisodesForSeries(seriesName: string): Promise<any[]> {
+export async function fetchEpisodesForSeries(seriesName) {
     if (episodeCache.has(seriesName)) {
-        return episodeCache.get(seriesName)!;
+        return episodeCache.get(seriesName);
     }
 
     try {
@@ -59,11 +57,11 @@ export async function fetchEpisodesForSeries(seriesName: string): Promise<any[]>
  * @returns A formatted Episode object.
  */
 export function selectRandomEpisode(
-    allEpisodes: any[],
-    seriesName: string,
-    minSeason: number,
-    maxSeason: number
-): Episode {
+    allEpisodes,
+    seriesName,
+    minSeason,
+    maxSeason
+) {
     const filteredEpisodes = allEpisodes.filter(ep => 
         ep.season >= minSeason && ep.season <= maxSeason
     );

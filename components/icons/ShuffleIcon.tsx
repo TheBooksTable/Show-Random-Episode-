@@ -1,7 +1,6 @@
-
 import React from 'react';
 
-export const ShuffleIcon: React.FC = () => (
+export const ShuffleIcon = () => (
     <svg 
         xmlns="http://www.w3.org/2000/svg" 
         width="24" 

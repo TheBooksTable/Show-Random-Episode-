@@ -1,14 +1,6 @@
 import React from 'react';
 
-interface ConfirmationModalProps {
-  isOpen: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
-  title: string;
-  children: React.ReactNode;
-}
-
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onConfirm, onCancel, title, children }) => {
+const ConfirmationModal = ({ isOpen, onConfirm, onCancel, title, children }) => {
   if (!isOpen) return null;
 
   return (

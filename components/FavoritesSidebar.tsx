@@ -1,16 +1,8 @@
 import React from 'react';
-import { Series } from '../types';
-import { TrashIcon } from './icons/TrashIcon';
-import { CloseIcon } from './icons/CloseIcon';
+import { TrashIcon } from './icons/TrashIcon.tsx';
+import { CloseIcon } from './icons/CloseIcon.tsx';
 
-interface FavoritesSidebarProps {
-    favorites: Series[];
-    onSelect: (series: Series) => void;
-    onRequestRemove: (series: Series) => void;
-    onClose?: () => void;
-}
-
-const FavoritesSidebar: React.FC<FavoritesSidebarProps> = ({ favorites, onSelect, onRequestRemove, onClose }) => {
+const FavoritesSidebar = ({ favorites, onSelect, onRequestRemove, onClose }) => {
     return (
         <div 
             className="p-5 bg-black/20 backdrop-blur-xl border border-white/10 rounded-l-2xl md:rounded-2xl shadow-2xl shadow-purple-500/10 h-full flex flex-col"

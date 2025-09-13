@@ -1,10 +1,6 @@
 import React from 'react';
 
-interface FavoriteStarIconProps {
-    isFavorite: boolean;
-}
-
-export const FavoriteStarIcon: React.FC<FavoriteStarIconProps> = ({ isFavorite }) => (
+export const FavoriteStarIcon = ({ isFavorite }) => (
     <svg 
         xmlns="http://www.w3.org/2000/svg" 
         width="24" 

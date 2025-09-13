@@ -1,17 +1,8 @@
 
 import React, { useRef, useEffect } from 'react';
 
-interface Wave {
-  y: number;
-  length: number;
-  amplitude: number;
-  frequency: number;
-  color: string;
-  speed: number;
-}
-
-const WaveBackground: React.FC = () => {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+const WaveBackground = () => {
+    const canvasRef = useRef(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -19,10 +10,10 @@ const WaveBackground: React.FC = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        let animationFrameId: number;
+        let animationFrameId;
         let increment = 0;
 
-        const waves: Wave[] = [
+        const waves = [
             { y: window.innerHeight / 2, length: 0.005, amplitude: 250, frequency: 0.015, color: 'rgba(66, 153, 225, 0.2)', speed: 0.01 },
             { y: window.innerHeight / 2, length: 0.008, amplitude: 200, frequency: 0.020, color: 'rgba(129, 140, 248, 0.2)', speed: 0.012 },
             { y: window.innerHeight / 2, length: 0.01, amplitude: 150, frequency: 0.025, color: 'rgba(99, 102, 241, 0.2)', speed: 0.015 },

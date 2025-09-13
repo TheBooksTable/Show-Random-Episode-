@@ -1,34 +1,33 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Series, Episode } from './types';
-import { fetchEpisodesForSeries, selectRandomEpisode } from './services/geminiService';
-import { seriesList } from './constants';
+import { fetchEpisodesForSeries, selectRandomEpisode } from './services/geminiService.ts';
+import { seriesList } from './constants.ts';
 
-import WaveBackground from './components/WaveBackground';
-import EpisodeCard from './components/EpisodeCard';
-import LoadingSpinner from './components/LoadingSpinner';
-import FavoritesSidebar from './components/FavoritesSidebar';
-import ConfirmationModal from './components/ConfirmationModal';
-import Toast from './components/Toast';
-import { ShuffleIcon } from './components/icons/ShuffleIcon';
-import { ReRollIcon } from './components/icons/ReRollIcon';
-import { FavoriteStarIcon } from './components/icons/FavoriteStarIcon';
-import { CloseIcon } from './components/icons/CloseIcon';
+import WaveBackground from './components/WaveBackground.tsx';
+import EpisodeCard from './components/EpisodeCard.tsx';
+import LoadingSpinner from './components/LoadingSpinner.tsx';
+import FavoritesSidebar from './components/FavoritesSidebar.tsx';
+import ConfirmationModal from './components/ConfirmationModal.tsx';
+import Toast from './components/Toast.tsx';
+import { ShuffleIcon } from './components/icons/ShuffleIcon.tsx';
+import { ReRollIcon } from './components/icons/ReRollIcon.tsx';
+import { FavoriteStarIcon } from './components/icons/FavoriteStarIcon.tsx';
+import { DiceIcon } from './components/icons/DiceIcon.tsx';
 
-const App: React.FC = () => {
-    const [seriesSearchTerm, setSeriesSearchTerm] = useState<string>('');
-    const [filteredSeries, setFilteredSeries] = useState<Series[]>([]);
-    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-    const [selectedSeries, setSelectedSeries] = useState<Series | null>(null);
-    const [seasonRange, setSeasonRange] = useState<[number, number]>([1, 1]);
-    const [recommendedEpisode, setRecommendedEpisode] = useState<Episode | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [showResult, setShowResult] = useState<boolean>(false);
-    const [showSeasonControls, setShowSeasonControls] = useState<boolean>(false);
-    const [favorites, setFavorites] = useState<Series[]>([]);
-    const [isFavoritesOpen, setIsFavoritesOpen] = useState<boolean>(false);
-    const [showToRemove, setShowToRemove] = useState<Series | null>(null);
-    const [toast, setToast] = useState<{ message: string; show: boolean }>({ message: '', show: false });
+const App = () => {
+    const [seriesSearchTerm, setSeriesSearchTerm] = useState('');
+    const [filteredSeries, setFilteredSeries] = useState([]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [selectedSeries, setSelectedSeries] = useState(null);
+    const [seasonRange, setSeasonRange] = useState([1, 1]);
+    const [recommendedEpisode, setRecommendedEpisode] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [showResult, setShowResult] = useState(false);
+    const [showSeasonControls, setShowSeasonControls] = useState(false);
+    const [favorites, setFavorites] = useState([]);
+    const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+    const [showToRemove, setShowToRemove] = useState(null);
+    const [toast, setToast] = useState({ message: '', show: false });
 
     // Handle splash screen removal
     useEffect(() => {
@@ -88,25 +87,25 @@ const App: React.FC = () => {
         }
     }, [selectedSeries]);
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (e) => {
         setSeriesSearchTerm(e.target.value);
         if (selectedSeries) {
             setSelectedSeries(null); // Deselect if user starts typing again
         }
     };
 
-    const handleSelectSeries = (series: Series) => {
+    const handleSelectSeries = (series) => {
         setSeriesSearchTerm(series.name);
         setSelectedSeries(series);
         setIsDropdownOpen(false);
     };
     
-    const handleSelectSeriesForMobile = (series: Series) => {
+    const handleSelectSeriesForMobile = (series) => {
         handleSelectSeries(series);
         setIsFavoritesOpen(false);
     };
 
-    const handleRangeChange = (type: 'min' | 'max', value: number) => {
+    const handleRangeChange = (type, value) => {
         const [min, max] = seasonRange;
         if (type === 'min') {
             setSeasonRange([value, Math.max(value, max)]);
@@ -115,13 +114,13 @@ const App: React.FC = () => {
         }
     };
 
-    const handleAddFavorite = (series: Series) => {
+    const handleAddFavorite = (series) => {
         if (!favorites.some(fav => fav.name === series.name)) {
             setFavorites([...favorites, series]);
         }
     };
     
-    const handleRequestRemove = (series: Series) => {
+    const handleRequestRemove = (series) => {
         setShowToRemove(series);
     };
 
@@ -147,19 +146,15 @@ const App: React.FC = () => {
     }, [favorites, selectedSeries]);
 
 
-    const handleGenerateClick = useCallback(async () => {
-        if (!selectedSeries) {
-            setError("Please select a series first.");
-            return;
-        }
+    const generateEpisode = useCallback(async (series, range) => {
         setIsLoading(true);
         setError(null);
         setRecommendedEpisode(null);
         setShowResult(false);
 
         try {
-            const allEpisodes = await fetchEpisodesForSeries(selectedSeries.name);
-            const episode = selectRandomEpisode(allEpisodes, selectedSeries.name, seasonRange[0], seasonRange[1]);
+            const allEpisodes = await fetchEpisodesForSeries(series.name);
+            const episode = selectRandomEpisode(allEpisodes, series.name, range[0], range[1]);
             setRecommendedEpisode(episode);
             setTimeout(() => setShowResult(true), 100);
         } catch (err) {
@@ -169,7 +164,19 @@ const App: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [selectedSeries, seasonRange]);
+    }, []);
+
+    const handleSurpriseMeClick = async () => {
+        const randomIndex = Math.floor(Math.random() * seriesList.length);
+        const randomSeries = seriesList[randomIndex];
+
+        // Update UI to reflect the choice
+        setSelectedSeries(randomSeries);
+        setSeriesSearchTerm(randomSeries.name);
+        
+        // Immediately fetch the episode for the entire series range
+        await generateEpisode(randomSeries, [1, randomSeries.seasons]);
+    };
 
     const seasonOptions = useMemo(() => {
         if (!selectedSeries) return [];
@@ -274,10 +281,10 @@ const App: React.FC = () => {
                             </div>
                         )}
                         
-                        {/* Action Button */}
-                        <div className="pt-2">
+                        {/* Action Buttons */}
+                        <div className="pt-2 space-y-4">
                             <button
-                                onClick={handleGenerateClick}
+                                onClick={() => selectedSeries && generateEpisode(selectedSeries, seasonRange)}
                                 disabled={!selectedSeries || isLoading}
                                 className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
                             >
@@ -293,6 +300,14 @@ const App: React.FC = () => {
                                     </>
                                 )}
                             </button>
+                            <button
+                                onClick={handleSurpriseMeClick}
+                                disabled={isLoading}
+                                className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                            >
+                                <DiceIcon />
+                                <span>Surprise Me</span>
+                            </button>
                         </div>
                     </div>
 
@@ -305,7 +320,7 @@ const App: React.FC = () => {
                                 <EpisodeCard episode={recommendedEpisode} />
                                 <div className="mt-4 flex justify-center">
                                      <button
-                                        onClick={handleGenerateClick}
+                                        onClick={() => selectedSeries && generateEpisode(selectedSeries, seasonRange)}
                                         disabled={isLoading}
                                         className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-200 disabled:opacity-50"
                                     >
@@ -322,6 +337,7 @@ const App: React.FC = () => {
                         favorites={favorites}
                         onSelect={handleSelectSeries}
                         onRequestRemove={handleRequestRemove}
+                        onClose={undefined}
                      />
                  </aside>
             </div>

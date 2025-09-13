@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './App.tsx';
 
 /*
 // SERVICE WORKER REGISTRATION DISABLED
@@ -10,7 +10,7 @@ import App from './App';
 // This was causing repeated, unrecoverable errors on page load.
 //
 // By disabling this, we ensure the application remains stable and functional for all users,
-// sacrificing offline PWA capabilities which are not supported by the platform.
+// sacrificing offline PWA features which are not supported by the platform.
 
 window.addEventListener('load', () => {
   if ('serviceWorker' in navigator && window.isSecureContext) {
